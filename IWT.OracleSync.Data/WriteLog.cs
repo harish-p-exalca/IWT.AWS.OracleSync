@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IWT.OracleSync.Data
 {
-    internal class WriteLog
+    public class WriteLog
     {
         public static void WriteToFile(string Message)
         {

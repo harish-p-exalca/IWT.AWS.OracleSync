@@ -62,7 +62,7 @@ namespace IWT.OracleSync.Data
             }
         }
 
-        public bool ExecuteQuery(string query)
+        public bool ExecuteQuery(SqlCommand command)
         {
             try
             {
@@ -70,7 +70,8 @@ namespace IWT.OracleSync.Data
                 con.Open();
                 try
                 {
-                    new SqlCommand(query, con).ExecuteNonQuery();
+                    command.Connection = con;
+                    command.ExecuteNonQuery();
                 }
                 catch (Exception exp)
                 {

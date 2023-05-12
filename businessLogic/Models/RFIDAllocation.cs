@@ -1,4 +1,6 @@
-﻿namespace IWT.OracleSync.Business
+﻿using System;
+
+namespace IWT.OracleSync.Business
 {
     public class RFIDAllocation
     {
@@ -28,5 +30,23 @@
         public string ModifiedOn { get; set; }
         public string OracleData { get; set;}
         public string OracleStatus { get; set;}
+        public int TransId { get; set; }
+    }
+
+    public class RFIDAllocationWithTrans
+    {
+        public int TransId { get; set; }
+        public int AllocationId { get; set; }        
+        public string TransType { get; set; }        
+        public int EmptyWeight { get; set; }
+        public int LoadWeight { get; set; }
+        public DateTime EmptyWeightDate { get; set; }
+        public string EmptyWeightTime { get; set; }
+        public DateTime LoadWeightDate { get; set; }
+        public string LoadWeightTime { get; set; }
+        public int NetWeight { get; set; }
+        public int TicketNo { get; set; }
+        public string SystemID { get; set; }
+        public string State { get; set; }
     }
 }

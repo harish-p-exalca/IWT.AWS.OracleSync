@@ -62,7 +62,7 @@ namespace IWT.OracleSync.Data
             }
         }
 
-        public bool ExecuteQuery(string query)
+        public bool ExecuteQuery(SqlCommand command)
         {
             try
             {
@@ -70,7 +70,8 @@ namespace IWT.OracleSync.Data
                 con.Open();
                 try
                 {
-                    new SqlCommand(query, con).ExecuteNonQuery();
+                    command.Connection = con;
+                    command.ExecuteNonQuery();
                 }
                 catch (Exception exp)
                 {
@@ -83,6 +84,24 @@ namespace IWT.OracleSync.Data
             {
                 WriteLog.WriteToFile("ExecuteQuery : " + ex.Message);
                 return false;
+            }
+        }
+
+        public void InsertData(SqlCommand cmd, CommandType commandType = CommandType.StoredProcedure)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(GetDecryptedConnectionStringDB());
+                cmd.Connection = con;
+                cmd.CommandType = commandType;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                WriteLog.WriteToFile("InsertData:" + ex.Message);
             }
         }
     }

@@ -12,14 +12,12 @@ using Newtonsoft.Json;
 
 namespace IWT.OracleSync.Console
 {
-    internal class Program
+    public class Program
     {
         static void Main()
         {
                 OracleDBSync oracleSync = new OracleDBSync();
-                oracleSync.getOracleData();
-                oracleSync.InsertIntoRFIDAllocations();
+                oracleSync.GetOracleData();
         }
-
     }
 }

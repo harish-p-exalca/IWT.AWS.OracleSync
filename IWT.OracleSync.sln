@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IWT.OracleSync.Data", "IWT.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IWT.OracleSync.Business", "businessLogic\IWT.OracleSync.Business.csproj", "{5A400C96-0E61-4FAA-97F1-69A0411A9C07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oracle_Data_Synchronization.Service", "Oracle_Data_Synchronization\Oracle_Data_Synchronization.Service.csproj", "{465106F1-1D54-4E0A-9151-87D8A850DA34}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Oracle_Database_Sync.Setup", "Oracle_Database_Sync\Oracle_Database_Sync.vdproj", "{6E4935C2-1537-41BC-9E3B-159B1B6EF71B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,12 @@ Global
 		{5A400C96-0E61-4FAA-97F1-69A0411A9C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A400C96-0E61-4FAA-97F1-69A0411A9C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A400C96-0E61-4FAA-97F1-69A0411A9C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{465106F1-1D54-4E0A-9151-87D8A850DA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{465106F1-1D54-4E0A-9151-87D8A850DA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{465106F1-1D54-4E0A-9151-87D8A850DA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{465106F1-1D54-4E0A-9151-87D8A850DA34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4935C2-1537-41BC-9E3B-159B1B6EF71B}.Debug|Any CPU.ActiveCfg = Debug
+		{6E4935C2-1537-41BC-9E3B-159B1B6EF71B}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

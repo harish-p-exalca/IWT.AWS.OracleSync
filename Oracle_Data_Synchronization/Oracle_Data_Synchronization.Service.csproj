@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A400C96-0E61-4FAA-97F1-69A0411A9C07}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IWT.OracleSync.Business</RootNamespace>
-    <AssemblyName>IWT.OracleSync.Business</AssemblyName>
+    <ProjectGuid>{465106F1-1D54-4E0A-9151-87D8A850DA34}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Oracle_Data_Synchronization</RootNamespace>
+    <AssemblyName>Oracle_Data_Synchronization</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,33 +33,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\OracleModel.cs" />
-    <Compile Include="Models\RFIDAllocation.cs" />
-    <Compile Include="OracleDBSync.cs" />
+    <Compile Include="Oracle_Data_Synchronization.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Oracle_Data_Synchronization.Designer.cs">
+      <DependentUpon>Oracle_Data_Synchronization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\businessLogic\IWT.OracleSync.Business.csproj">
+      <Project>{5a400c96-0e61-4faa-97f1-69a0411a9c07}</Project>
+      <Name>IWT.OracleSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IWT.OracleSync.Console\IWT.OracleSync.Console.csproj">
+      <Project>{99ede57f-86a9-47ce-aa44-3965f96031f0}</Project>
+      <Name>IWT.OracleSync.Console</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IWT.OracleSync.Data\IWT.OracleSync.Data.csproj">
-      <Project>{12CE3D7C-1A70-4CB4-B07E-24EFD558C2A3}</Project>
+      <Project>{12ce3d7c-1a70-4cb4-b07e-24efd558c2a3}</Project>
       <Name>IWT.OracleSync.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
