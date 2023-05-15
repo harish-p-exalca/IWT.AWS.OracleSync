@@ -1,4 +1,4 @@
-﻿namespace Oracle_Data_Synchronization
+﻿namespace WeighSyncService
 {
     partial class ProjectInstaller
     {
@@ -39,6 +39,7 @@
             // 
             // serviceInstaller1
             // 
+            this.serviceInstaller1.DisplayName = "Weigh Sync Service";
             this.serviceInstaller1.ServiceName = "WeighSyncService";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 

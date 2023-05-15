@@ -70,10 +70,6 @@
       <Project>{5a400c96-0e61-4faa-97f1-69a0411a9c07}</Project>
       <Name>IWT.OracleSync.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IWT.OracleSync.Console\IWT.OracleSync.Console.csproj">
-      <Project>{99ede57f-86a9-47ce-aa44-3965f96031f0}</Project>
-      <Name>IWT.OracleSync.Console</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IWT.OracleSync.Data\IWT.OracleSync.Data.csproj">
       <Project>{12ce3d7c-1a70-4cb4-b07e-24efd558c2a3}</Project>
       <Name>IWT.OracleSync.Data</Name>
