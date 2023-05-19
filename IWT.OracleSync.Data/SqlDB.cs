@@ -57,7 +57,7 @@ namespace IWT.OracleSync.Data
             }
             catch (Exception ex)
             {
-                WriteLog.WriteToFile("GetAllData:" + ex.Message);
+                WriteLog.WriteToFile("SQLDB/GetAllData:" + ex.Message);
                 return null;
             }
         }
@@ -82,7 +82,7 @@ namespace IWT.OracleSync.Data
             }
             catch (Exception ex)
             {
-                WriteLog.WriteToFile("ExecuteQuery : " + ex.Message);
+                WriteLog.WriteToFile("SQLDB/ExecuteQuery : " + ex.Message);
                 return false;
             }
         }
@@ -101,7 +101,7 @@ namespace IWT.OracleSync.Data
             }
             catch (Exception ex)
             {
-                WriteLog.WriteToFile("InsertData:" + ex.Message);
+                WriteLog.WriteToFile("SQLDB/InsertData:" + ex.Message);
             }
         }
     }

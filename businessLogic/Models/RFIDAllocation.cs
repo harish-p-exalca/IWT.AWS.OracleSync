@@ -31,8 +31,6 @@ namespace IWT.OracleSync.Business
         public string OracleData { get; set;}
         public string OracleStatus { get; set;}
         public int? TransId { get; set; }
-        public string FTError { get; set; }
-        public string STError { get; set;}
     }
 
     public class RFIDAllocationWithTrans
@@ -54,6 +52,7 @@ namespace IWT.OracleSync.Business
         public string STError { get; set; }
         public DateTime? FTErrorDate { get; set; }
         public DateTime? STErrorDate { get; set;}
+        public bool? IsError { get; set; }
         public string VehicleNumber { get; set;}
         public string RFIDTag { get; set;}
     }

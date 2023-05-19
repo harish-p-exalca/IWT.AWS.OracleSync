@@ -20,24 +20,15 @@ namespace IWT.OracleSync.Business
         public void GetOracleData()
         {
             WriteLog.WriteToFile("Fetching data from Oracle database transaction table");
-            string queryForFirst = "select * from Gate_Entry where GINDT IS NOT NULL AND FIRSTWT IS NULL AND STATUS_FLAG IS NULL AND CFLAG = 'F'";
+            string queryForFirst = "select * from Gate_Entry where GINDT IS NOT NULL AND FIRSTWT IS NULL AND STATUS_FLAG IN (NULL,'F','S') AND CFLAG = 'F'";
             DataTable filteredTable1 = _dbContext.GetAllData(queryForFirst);
             string JSONString1 = JsonConvert.SerializeObject(filteredTable1);
             oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString1);
             WriteLog.WriteToFile($"Number of records found :- {oracleData.Count}");
             if (oracleData != null && oracleData.Count > 0)
             {
-                
                 InsertIntoRFIDAllocations();
             }
-            //string queryForSecond = "select * from Gate_Entry where FIRSTWT IS NOT NULL AND STATUS_FLAG = 'S' AND CFLAG = 'F'";
-            //DataTable filteredTable2 = _dbContext.GetAllData(queryForSecond);
-            //string JSONString2 = JsonConvert.SerializeObject(filteredTable2);
-            //oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString2);
-            //if (oracleData != null && oracleData.Count > 0)
-            //{
-            //    InsertIntoRFIDAllocations();
-            //}
             UpdateFirstTransactionOracleData();
             UpdateSecondTransactionOracleData();
         }
@@ -110,9 +101,14 @@ namespace IWT.OracleSync.Business
                                             'Open',
                                             '{model.TransId}');SELECT SCOPE_IDENTITY();";
                     SqlCommand cmd = new SqlCommand(insertQuery);
-
                     _sqlDb.InsertData(cmd, CommandType.Text);
-                }                
+                }
+                else
+                {
+                    string updateQuery = $@"update [RFID_Allocations] set OracleData='{JsonConvert.SerializeObject(model)}' where AllocationId={rfIdAllocation[0].AllocationId};";
+                    SqlCommand cmd = new SqlCommand(updateQuery);
+                    _sqlDb.InsertData(cmd, CommandType.Text);
+                }
             }
         }
 
@@ -166,27 +162,24 @@ namespace IWT.OracleSync.Business
                 }
             }
             DataTable table1 = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId], ge.[VehicleNumber], ge.[TransId], ge.[FTError], ge.[STError], ge.[FTErrorDate], ge.[STErrorDate], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], tr.[LoadWeightTime],
-                                tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from [RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='Open'");
+                                tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from [RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='Open' and ge.IsError=1");
             string JSONString1 = JsonConvert.SerializeObject(table1);
             var oracleData1 = JsonConvert.DeserializeObject<List<RFIDAllocationWithTrans>>(JSONString1);
             if (oracleData1 != null && oracleData1.Count > 0)
             {
                 foreach (var data in oracleData1)
                 {
-                    if (!string.IsNullOrEmpty(data.FTError))
+                    var errLog = new ERRLOGS
                     {
-                        var errLog = new ERRLOGS
-                        {
-                            TRANS_NO = data.TransId.Value,
-                            VEH_NO = data.VehicleNumber,
-                            ERRDES = data.FTError,
-                            ERRDATE = data.FTErrorDate.Value,
-                            ERRTIME = data.FTErrorDate.Value.ToShortTimeString(),
-                            RFIDID = data.RFIDTag,
-                            WB_NO = data.SystemID,
-                        };
-                        InsertErrorDetails(errLog);
-                    }
+                        TRANS_NO = data.TransId.Value,
+                        VEH_NO = data.VehicleNumber,
+                        ERRDES = data.FTError,
+                        ERRDATE = data.FTErrorDate.Value,
+                        ERRTIME = data.FTErrorDate.Value.ToShortTimeString(),
+                        RFIDID = data.RFIDTag,
+                        WB_NO = data.SystemID,
+                    };
+                    InsertErrorDetails(errLog,data.TransId);
                 }
             }
         }
@@ -259,13 +252,13 @@ namespace IWT.OracleSync.Business
                             RFIDID = data.RFIDTag,
                             WB_NO = data.SystemID,
                         };
-                        InsertErrorDetails(errLog);
+                        InsertErrorDetails(errLog, data.TransId);
                     }
                 }
             }
         }
 
-        public void InsertErrorDetails(ERRLOGS errLogs)
+        public void InsertErrorDetails(ERRLOGS errLogs,int? transId)
         {
             string insertQuery = $@"INSERT INTO [ERRLOGS] (
                                                             TRANS_NO,
@@ -285,8 +278,10 @@ namespace IWT.OracleSync.Business
                                                             '{errLogs.ERRTIME}',
                                                             '{errLogs.WB_NO}') ";
             SqlCommand cmd = new SqlCommand(insertQuery);
-
-            //_dbContext.InsertData(cmd, CommandType.Text);
+            _dbContext.InsertData(cmd, CommandType.Text);
+            string updateQueryRFIDAllocation = $@"UPDATE [RFID_Allocations] SET IsError='0' WHERE TransId={transId}";
+            SqlCommand cmdRFIDAllocation = new SqlCommand(updateQueryRFIDAllocation);
+            _sqlDb.ExecuteQuery(cmdRFIDAllocation);
         }
     }
 }

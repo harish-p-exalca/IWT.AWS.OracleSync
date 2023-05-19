@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.OracleClient;
 
 namespace IWT.OracleSync.Data
 {
@@ -42,7 +43,7 @@ namespace IWT.OracleSync.Data
         {
             try
             {
-                
+
                 DataTable dt = new DataTable();
                 SqlConnection con = new SqlConnection(ConnectionString);
                 SqlCommand cmd = new SqlCommand(SQL);
@@ -104,5 +105,73 @@ namespace IWT.OracleSync.Data
                 WriteLog.WriteToFile("InsertData:" + ex.Message);
             }
         }
+
+        //public DataTable GetAllData
+        //   (string SQL)
+        //{
+        //    try
+        //    {
+
+        //        DataTable dt = new DataTable();
+        //        OracleConnection con = new OracleConnection(ConnectionString);
+        //        OracleCommand cmd = new OracleCommand(SQL);
+        //        cmd.Connection = con;
+        //        using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+        //        {
+        //            da.Fill(dt);
+        //        }
+        //        cmd.Dispose();
+        //        con.Close();
+        //        return dt;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteLog.WriteToFile("OracleDB/GetAllData:" + ex.Message);
+        //        return null;
+        //    }
+        //}
+
+        //public bool ExecuteQuery(OracleCommand command)
+        //{
+        //    try
+        //    {
+        //        OracleConnection con = new OracleConnection(ConnectionString);
+        //        con.Open();
+        //        try
+        //        {
+        //            command.Connection = con;
+        //            command.ExecuteNonQuery();
+        //        }
+        //        catch (Exception exp)
+        //        {
+        //            throw exp;
+        //        }
+        //        con.Close();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteLog.WriteToFile("OracleDB/ExecuteQuery : " + ex.Message);
+        //        return false;
+        //    }
+        //}
+
+        //public void InsertData(OracleCommand cmd, CommandType commandType = CommandType.StoredProcedure)
+        //{
+        //    try
+        //    {
+        //        OracleConnection con = new OracleConnection(GetDecryptedConnectionStringDB());
+        //        cmd.Connection = con;
+        //        cmd.CommandType = commandType;
+        //        con.Open();
+        //        cmd.ExecuteNonQuery();
+        //        cmd.Dispose();
+        //        con.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteLog.WriteToFile("OracleDB/InsertData:" + ex.Message);
+        //    }
+        //}
     }
 }

@@ -31,7 +31,7 @@ namespace IWT.OracleSync.Business
         public string IMAGENO3 { get; set;}
         public string IMAGENO4 { get; set;}
         public int? PARTYWT { get; set;}
-        
+        public string AFLAG { get; set; }
     }
 
     public class ERRLOGS
