@@ -37,14 +37,14 @@ namespace WeighSyncService
                 DateTime scheduledTime = DateTime.MinValue;
 
                 //Get the Interval in Minutes from AppSettings.
-                int intervalMinutes = Convert.ToInt32(ConfigurationManager.AppSettings["IntervalMinutes"]);
+                int interval = Convert.ToInt32(ConfigurationManager.AppSettings["interval"]);
 
                 //Set the Scheduled Time by adding the Interval to Current Time.
-                scheduledTime = DateTime.Now.AddMinutes(intervalMinutes);
+                scheduledTime = DateTime.Now.AddSeconds(interval);
                 if (DateTime.Now > scheduledTime)
                 {
                     //If Scheduled Time is passed set Schedule for the next Interval.
-                    scheduledTime = scheduledTime.AddMinutes(intervalMinutes);
+                    scheduledTime = scheduledTime.AddSeconds(interval);
                 }
 
                 TimeSpan timeSpan = scheduledTime.Subtract(DateTime.Now);

@@ -1,4 +1,6 @@
-﻿namespace IWT.OracleSync.Business
+﻿using System;
+
+namespace IWT.OracleSync.Business
 {
     public class OracleModel
     {
@@ -26,6 +28,21 @@
         public string SUPPLIER_CODE { get; set;}
         public string SUPPLIER_DESCRIPTION { get; set;}
         public string TRANSTYPE { get; set; }
+        public string IMAGENO3 { get; set;}
+        public string IMAGENO4 { get; set;}
+        public int? PARTYWT { get; set;}
         
+    }
+
+    public class ERRLOGS
+    {
+        public int Id { get; set; }
+        public int TRANS_NO { get; set; }
+        public string VEH_NO { get; set; }
+        public string ERRDES { get; set; }
+        public DateTime? ERRDATE { get; set; }
+        public string RFIDID { get; set; }
+        public string ERRTIME { get; set; }
+        public string WB_NO { get; set; }
     }
 }

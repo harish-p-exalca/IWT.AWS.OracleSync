@@ -21,19 +21,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_178B474CCD36DBEC946125B0D1D271CA"
-        "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2D78D73D468E116AFA26B173EBE940FD"
-        "OwnerKey" = "8:_178B474CCD36DBEC946125B0D1D271CA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2D78D73D468E116AFA26B173EBE940FD"
+        "MsmKey" = "8:_810CD1123FF33ECFC8DFFDBD5C86FD36"
         "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,44 +33,56 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D70C5E1C74513CBD083A3A253F08E56E"
-        "OwnerKey" = "8:_178B474CCD36DBEC946125B0D1D271CA"
+        "MsmKey" = "8:_C82B9949991517C73B7110FF1F186B8F"
+        "OwnerKey" = "8:_810CD1123FF33ECFC8DFFDBD5C86FD36"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D70C5E1C74513CBD083A3A253F08E56E"
+        "MsmKey" = "8:_C82B9949991517C73B7110FF1F186B8F"
         "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E3E94CA4EAFA358878481B789626C603"
+        "OwnerKey" = "8:_810CD1123FF33ECFC8DFFDBD5C86FD36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E3E94CA4EAFA358878481B789626C603"
+        "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_810CD1123FF33ECFC8DFFDBD5C86FD36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C82B9949991517C73B7110FF1F186B8F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E3E94CA4EAFA358878481B789626C603"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_98D75F12E8D39E575E7D7F980634A86B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0FC54731B1D44CC69B9B62DCF8A60746"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_178B474CCD36DBEC946125B0D1D271CA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D70C5E1C74513CBD083A3A253F08E56E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2D78D73D468E116AFA26B173EBE940FD"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -103,6 +103,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -119,6 +135,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -204,51 +236,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_178B474CCD36DBEC946125B0D1D271CA"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_810CD1123FF33ECFC8DFFDBD5C86FD36"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:IWT.OracleSync.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_178B474CCD36DBEC946125B0D1D271CA"
+                    "_810CD1123FF33ECFC8DFFDBD5C86FD36"
                     {
                     "Name" = "8:IWT.OracleSync.Business.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:IWT.OracleSync.Business.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_D2B7FBEA711949B3BB8A0EF46FD55BFF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2D78D73D468E116AFA26B173EBE940FD"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_2D78D73D468E116AFA26B173EBE940FD"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D2B7FBEA711949B3BB8A0EF46FD55BFF"
@@ -297,20 +298,51 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D70C5E1C74513CBD083A3A253F08E56E"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C82B9949991517C73B7110FF1F186B8F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:IWT.OracleSync.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_D70C5E1C74513CBD083A3A253F08E56E"
+                    "_C82B9949991517C73B7110FF1F186B8F"
                     {
                     "Name" = "8:IWT.OracleSync.Data.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:IWT.OracleSync.Data.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D2B7FBEA711949B3BB8A0EF46FD55BFF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E3E94CA4EAFA358878481B789626C603"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E3E94CA4EAFA358878481B789626C603"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D2B7FBEA711949B3BB8A0EF46FD55BFF"
@@ -385,7 +417,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WeighSync"
         "ProductCode" = "8:{EB831DDA-49E6-4907-AED5-D242FA292ED6}"
-        "PackageCode" = "8:{7D6CDCE6-65CF-4673-A7B7-5B5E4008BFBE}"
+        "PackageCode" = "8:{413A5F1C-3A1B-4B46-962A-D15E4B37CB3D}"
         "UpgradeCode" = "8:{1753D283-6975-4C4A-80CC-5CC891BC64C3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -393,7 +425,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Exalca"
+        "Manufacturer" = "8:EDPL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:WeighSync"

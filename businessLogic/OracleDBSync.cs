@@ -15,24 +15,29 @@ namespace IWT.OracleSync.Business
         OracleDB _dbContext = new OracleDB();
         string firstCamera = ConfigurationManager.AppSettings["Camera1"];
         string secondCamera = ConfigurationManager.AppSettings["Camera2"];
+        string thirdCamera = ConfigurationManager.AppSettings["Camera3"];
+        string fourthCamera = ConfigurationManager.AppSettings["Camera4"];
         public void GetOracleData()
         {
+            WriteLog.WriteToFile("Fetching data from Oracle database transaction table");
             string queryForFirst = "select * from Gate_Entry where GINDT IS NOT NULL AND FIRSTWT IS NULL AND STATUS_FLAG IS NULL AND CFLAG = 'F'";
             DataTable filteredTable1 = _dbContext.GetAllData(queryForFirst);
             string JSONString1 = JsonConvert.SerializeObject(filteredTable1);
             oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString1);
+            WriteLog.WriteToFile($"Number of records found :- {oracleData.Count}");
             if (oracleData != null && oracleData.Count > 0)
             {
+                
                 InsertIntoRFIDAllocations();
             }
-            string queryForSecond = "select * from Gate_Entry where FIRSTWT IS NOT NULL AND STATUS_FLAG = 'S' AND CFLAG = 'F'";
-            DataTable filteredTable2 = _dbContext.GetAllData(queryForSecond);
-            string JSONString2 = JsonConvert.SerializeObject(filteredTable2);
-            oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString2);
-            if (oracleData != null && oracleData.Count > 0)
-            {
-                InsertIntoRFIDAllocations();
-            }
+            //string queryForSecond = "select * from Gate_Entry where FIRSTWT IS NOT NULL AND STATUS_FLAG = 'S' AND CFLAG = 'F'";
+            //DataTable filteredTable2 = _dbContext.GetAllData(queryForSecond);
+            //string JSONString2 = JsonConvert.SerializeObject(filteredTable2);
+            //oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString2);
+            //if (oracleData != null && oracleData.Count > 0)
+            //{
+            //    InsertIntoRFIDAllocations();
+            //}
             UpdateFirstTransactionOracleData();
             UpdateSecondTransactionOracleData();
         }
@@ -41,11 +46,13 @@ namespace IWT.OracleSync.Business
         {
             foreach (OracleModel model in oracleData)
             {
+                
                 DataTable table = _sqlDb.GetAllData($"select * from RFID_Allocations where TransId={model.TransId}");
                 string JSONString = JsonConvert.SerializeObject(table);
                 var rfIdAllocation = JsonConvert.DeserializeObject<List<RFIDAllocation>>(JSONString);
                 if (rfIdAllocation == null || rfIdAllocation.Count == 0)
                 {
+                    WriteLog.WriteToFile($"Inserting data into AWS Gate Entry for {model.TransId}");
                     if (model.TRANSTYPE.Trim() == "R")
                     {
                         model.TRANSTYPE = "Inbound";
@@ -82,7 +89,7 @@ namespace IWT.OracleSync.Business
                                             0,
                                             '',
                                             'FT',
-                                            1,
+                                            '{model.TRANSTYPE == "Inbound"}',
                                             '{model.VEHICLE_NUMBER}',
                                             '{model.MATERIAL_CODE}',
                                             '{model.MATERIAL_DESCRIPTION}',
@@ -95,7 +102,7 @@ namespace IWT.OracleSync.Business
                                             'In-Transit',
                                             '[]',
                                             '',
-                                            '6100000050',
+                                            '',
                                             '0',
                                             '0',
                                             '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}',
@@ -111,8 +118,9 @@ namespace IWT.OracleSync.Business
 
         public void UpdateFirstTransactionOracleData()
         {
-            DataTable table = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId], ge.[TransId], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], tr.[LoadWeightTime],
-                                tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from[RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='First'");
+            WriteLog.WriteToFile("Fetching first transaction records");
+            DataTable table = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId], ge.[VehicleNumber], ge.[TransId], ge.[FTError], ge.[STError], ge.[FTErrorDate], ge.[STErrorDate], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], tr.[LoadWeightTime],
+                                tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from [RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='First'");
             string JSONString = JsonConvert.SerializeObject(table);
             var oracleData = JsonConvert.DeserializeObject<List<RFIDAllocationWithTrans>>(JSONString);
             if (oracleData != null && oracleData.Count > 0)
@@ -126,18 +134,20 @@ namespace IWT.OracleSync.Business
                     {
                         if (data.TransType == "Inbound")
                         {
-                            firstWeightDate = data.LoadWeightDate.ToString();
+                            firstWeightDate = data.LoadWeightDate.Value.Date.ToString("dd-MMM-yyyy");
                             firstWeightTime = data.LoadWeightTime.ToString();
                             firstWeight = data.LoadWeight.ToString();
                         }
                         else
                         {
-                            firstWeightDate = data.EmptyWeightDate.ToString();
+                            firstWeightDate = data.EmptyWeightDate.Value.Date.ToString("dd-MMM-yyyy");
                             firstWeightTime = data.EmptyWeightTime.ToString();
                             firstWeight = data.EmptyWeight.ToString();
                         }
+                        WriteLog.WriteToFile("Updating first transaction records");
                         string camera1 = $"{firstCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
-                        string updateQuery = $@"UPDATE [Gate_Entry] SET FIRSTWTDT='{firstWeightDate}', FIRSTWTTM='{firstWeightTime}', FIRSTWT='{firstWeight}', STATUS_FLAG='S', WBNO_F='{data.SystemID}', IMAGENO1='{camera1}' WHERE TransId={data.TransId}";
+                        string camera3 = $"{thirdCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
+                        string updateQuery = $@"UPDATE [Gate_Entry] SET FIRSTWTDT='{firstWeightDate}', FIRSTWTTM='{firstWeightTime}', FIRSTWT='{firstWeight}', STATUS_FLAG='S', WBNO_F='{data.SystemID}', IMAGENO1='{camera1}', IMAGENO3='{camera3}' WHERE TransId={data.TransId}";
                         SqlCommand cmd = new SqlCommand(updateQuery);
                         var response = _dbContext.ExecuteQuery(cmd);
                         if (response)
@@ -150,15 +160,41 @@ namespace IWT.OracleSync.Business
                         {
                             throw new Exception("Something Went Wrong");
                         }
-                    }                 
+                    }
                     
+
+                }
+            }
+            DataTable table1 = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId], ge.[VehicleNumber], ge.[TransId], ge.[FTError], ge.[STError], ge.[FTErrorDate], ge.[STErrorDate], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], tr.[LoadWeightTime],
+                                tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from [RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='Open'");
+            string JSONString1 = JsonConvert.SerializeObject(table1);
+            var oracleData1 = JsonConvert.DeserializeObject<List<RFIDAllocationWithTrans>>(JSONString1);
+            if (oracleData1 != null && oracleData1.Count > 0)
+            {
+                foreach (var data in oracleData1)
+                {
+                    if (!string.IsNullOrEmpty(data.FTError))
+                    {
+                        var errLog = new ERRLOGS
+                        {
+                            TRANS_NO = data.TransId.Value,
+                            VEH_NO = data.VehicleNumber,
+                            ERRDES = data.FTError,
+                            ERRDATE = data.FTErrorDate.Value,
+                            ERRTIME = data.FTErrorDate.Value.ToShortTimeString(),
+                            RFIDID = data.RFIDTag,
+                            WB_NO = data.SystemID,
+                        };
+                        InsertErrorDetails(errLog);
+                    }
                 }
             }
         }
 
         public void UpdateSecondTransactionOracleData()
         {
-            DataTable table = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId], ge.[TransId], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], 
+            WriteLog.WriteToFile("Fetching second transaction records");
+            DataTable table = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId],ge.[VehicleNumber], ge.[TransId], ge.[FTError], ge.[STError],ge.[FTErrorDate], ge.[STErrorDate], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], 
                               tr.[LoadWeightTime], tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from[RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='Second'");
             string JSONString = JsonConvert.SerializeObject(table);
             var oracleData = JsonConvert.DeserializeObject<List<RFIDAllocationWithTrans>>(JSONString);
@@ -171,20 +207,22 @@ namespace IWT.OracleSync.Business
                 {
                     if (!string.IsNullOrEmpty(data.TransType))
                     {
-                        if (data.TransType == "Inbound")
+                        if (data.TransType == "Outbound")
                         {
-                            secondWeightDate = data.LoadWeightDate.ToString();
+                            secondWeightDate = data.LoadWeightDate.Value.Date.ToString("dd-MMM-yyyy");
                             secondWeightTime = data.LoadWeightTime.ToString();
                             secondWeight = data.LoadWeight.ToString();
                         }
                         else
                         {
-                            secondWeightDate = data.EmptyWeightDate.ToString();
+                            secondWeightDate = data.EmptyWeightDate.Value.Date.ToString("dd-MMM-yyyy");
                             secondWeightTime = data.EmptyWeightTime.ToString();
                             secondWeight = data.EmptyWeight.ToString();
                         }
+                        WriteLog.WriteToFile("Updating second transaction records");
                         string camera2 = $"{secondCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
-                        string updateQuery = $@"UPDATE [Gate_Entry] SET SECONDWTDT='{secondWeightDate}', SECONDWTTM='{secondWeightTime}', SECONDWT='{secondWeight}', STATUS_FLAG='C', NETWT='{data.NetWeight}', WBNO_S='{data.SystemID}', IMAGENO2='{camera2}' WHERE TransId={data.TransId}";
+                        string camera4 = $"{fourthCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
+                        string updateQuery = $@"UPDATE [Gate_Entry] SET SECONDWTDT='{secondWeightDate}', SECONDWTTM='{secondWeightTime}', SECONDWT='{secondWeight}', STATUS_FLAG='C', NETWT='{data.NetWeight}', WBNO_S='{data.SystemID}', IMAGENO2='{camera2}', IMAGENO4='{camera4}' WHERE TransId={data.TransId}";
                         SqlCommand cmd = new SqlCommand(updateQuery);
                         var response = _dbContext.ExecuteQuery(cmd);
                         if (response)
@@ -200,6 +238,55 @@ namespace IWT.OracleSync.Business
                     }                    
                 }
             }
+
+            DataTable table2 = _sqlDb.GetAllData($@"select ge.[TransType], ge.[AllocationId],ge.[VehicleNumber], ge.[TransId], ge.[FTError], ge.[STError],ge.[FTErrorDate], ge.[STErrorDate], tr.[EmptyWeight], tr.[LoadWeight], tr.[EmptyWeightDate], tr.[LoadWeightDate], tr.[EmptyWeightTime], 
+                              tr.[LoadWeightTime], tr.[NetWeight], tr.[TicketNo], tr.[State], tr.[SystemID] from[RFID_Allocations] ge inner join [Transaction] tr on ge.AllocationId = tr.RFIDAllocation where ge.OracleStatus='First'");
+            string JSONString2 = JsonConvert.SerializeObject(table2);
+            var oracleData2 = JsonConvert.DeserializeObject<List<RFIDAllocationWithTrans>>(JSONString2);
+            if (oracleData2 != null && oracleData2.Count > 0)
+            {
+                foreach (var data in oracleData2)
+                {
+                    if (!string.IsNullOrEmpty(data.STError))
+                    {
+                        var errLog = new ERRLOGS
+                        {
+                            TRANS_NO = data.TransId.Value,
+                            VEH_NO = data.VehicleNumber,
+                            ERRDES = data.STError,
+                            ERRDATE = data.STErrorDate.Value,
+                            ERRTIME = data.STErrorDate.Value.ToShortTimeString(),
+                            RFIDID = data.RFIDTag,
+                            WB_NO = data.SystemID,
+                        };
+                        InsertErrorDetails(errLog);
+                    }
+                }
+            }
+        }
+
+        public void InsertErrorDetails(ERRLOGS errLogs)
+        {
+            string insertQuery = $@"INSERT INTO [ERRLOGS] (
+                                                            TRANS_NO,
+                                                            VEH_NO,    
+                                                            ERRDES,     
+                                                            ERRDATE,    
+                                                            RFIDID,    
+                                                            ERRTIME,    
+                                                            WB_NO                                                          
+                                                          ) values 
+                                                          (
+                                                            '{errLogs.TRANS_NO}',
+                                                            '{errLogs.VEH_NO}',
+                                                            '{errLogs.ERRDES}',
+                                                            '{errLogs.ERRDATE}',
+                                                            '{errLogs.RFIDID}',
+                                                            '{errLogs.ERRTIME}',
+                                                            '{errLogs.WB_NO}') ";
+            SqlCommand cmd = new SqlCommand(insertQuery);
+
+            //_dbContext.InsertData(cmd, CommandType.Text);
         }
     }
 }
