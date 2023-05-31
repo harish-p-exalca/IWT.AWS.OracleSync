@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.OracleClient;
 using System.Data.SqlClient;
 
 namespace IWT.OracleSync.Business
@@ -20,7 +21,7 @@ namespace IWT.OracleSync.Business
         public void GetOracleData()
         {
             WriteLog.WriteToFile("Fetching data from Oracle database transaction table");
-            string queryForFirst = "select * from Gate_Entry where GINDT IS NOT NULL AND FIRSTWT IS NULL AND STATUS_FLAG IN (NULL,'F','S') AND CFLAG = 'F'";
+            string queryForFirst = "select * from TRANS where GINDT IS NOT NULL AND FIRSTWT IS NULL AND STATUS_FLAG IN (NULL,'F','S') AND CFLAG = 'F'";
             DataTable filteredTable1 = _dbContext.GetAllData(queryForFirst);
             string JSONString1 = JsonConvert.SerializeObject(filteredTable1);
             oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString1);
@@ -143,8 +144,8 @@ namespace IWT.OracleSync.Business
                         WriteLog.WriteToFile("Updating first transaction records");
                         string camera1 = $"{firstCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
                         string camera3 = $"{thirdCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
-                        string updateQuery = $@"UPDATE [Gate_Entry] SET FIRSTWTDT='{firstWeightDate}', FIRSTWTTM='{firstWeightTime}', FIRSTWT='{firstWeight}', STATUS_FLAG='S', WBNO_F='{data.SystemID}', IMAGENO1='{camera1}', IMAGENO3='{camera3}' WHERE TransId={data.TransId}";
-                        SqlCommand cmd = new SqlCommand(updateQuery);
+                        string updateQuery = $@"UPDATE [TRANS] SET FIRSTWTDT='{firstWeightDate}', FIRSTWTTM='{firstWeightTime}', FIRSTWT='{firstWeight}', STATUS_FLAG='S', WBNO_F='{data.SystemID}', IMAGENO1='{camera1}', IMAGENO3='{camera3}' WHERE TransId={data.TransId}";
+                        OracleCommand cmd = new OracleCommand(updateQuery);
                         var response = _dbContext.ExecuteQuery(cmd);
                         if (response)
                         {
@@ -215,8 +216,8 @@ namespace IWT.OracleSync.Business
                         WriteLog.WriteToFile("Updating second transaction records");
                         string camera2 = $"{secondCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
                         string camera4 = $"{fourthCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
-                        string updateQuery = $@"UPDATE [Gate_Entry] SET SECONDWTDT='{secondWeightDate}', SECONDWTTM='{secondWeightTime}', SECONDWT='{secondWeight}', STATUS_FLAG='C', NETWT='{data.NetWeight}', WBNO_S='{data.SystemID}', IMAGENO2='{camera2}', IMAGENO4='{camera4}' WHERE TransId={data.TransId}";
-                        SqlCommand cmd = new SqlCommand(updateQuery);
+                        string updateQuery = $@"UPDATE [TRANS] SET SECONDWTDT='{secondWeightDate}', SECONDWTTM='{secondWeightTime}', SECONDWT='{secondWeight}', STATUS_FLAG='C', NETWT='{data.NetWeight}', WBNO_S='{data.SystemID}', IMAGENO2='{camera2}', IMAGENO4='{camera4}' WHERE TransId={data.TransId}";
+                        OracleCommand cmd = new OracleCommand(updateQuery);
                         var response = _dbContext.ExecuteQuery(cmd);
                         if (response)
                         {
@@ -277,7 +278,7 @@ namespace IWT.OracleSync.Business
                                                             '{errLogs.RFIDID}',
                                                             '{errLogs.ERRTIME}',
                                                             '{errLogs.WB_NO}') ";
-            SqlCommand cmd = new SqlCommand(insertQuery);
+            OracleCommand cmd = new OracleCommand(insertQuery);
             _dbContext.InsertData(cmd, CommandType.Text);
             string updateQueryRFIDAllocation = $@"UPDATE [RFID_Allocations] SET IsError='0' WHERE TransId={transId}";
             SqlCommand cmdRFIDAllocation = new SqlCommand(updateQueryRFIDAllocation);

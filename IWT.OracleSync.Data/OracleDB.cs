@@ -38,74 +38,6 @@ namespace IWT.OracleSync.Data
             }
         }
 
-        public DataTable GetAllData
-           (string SQL)
-        {
-            try
-            {
-
-                DataTable dt = new DataTable();
-                SqlConnection con = new SqlConnection(ConnectionString);
-                SqlCommand cmd = new SqlCommand(SQL);
-                cmd.Connection = con;
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                {
-                    da.Fill(dt);
-                }
-                cmd.Dispose();
-                con.Close();
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                WriteLog.WriteToFile("GetAllData:" + ex.Message);
-                return null;
-            }
-        }
-
-        public bool ExecuteQuery(SqlCommand command)
-        {
-            try
-            {
-                SqlConnection con = new SqlConnection(ConnectionString);
-                con.Open();
-                try
-                {
-                    command.Connection = con;
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception exp)
-                {
-                    throw exp;
-                }
-                con.Close();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                WriteLog.WriteToFile("ExecuteQuery : " + ex.Message);
-                return false;
-            }
-        }
-
-        public void InsertData(SqlCommand cmd, CommandType commandType = CommandType.StoredProcedure)
-        {
-            try
-            {
-                SqlConnection con = new SqlConnection(GetDecryptedConnectionStringDB());
-                cmd.Connection = con;
-                cmd.CommandType = commandType;
-                con.Open();
-                cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                con.Close();
-            }
-            catch (Exception ex)
-            {
-                WriteLog.WriteToFile("InsertData:" + ex.Message);
-            }
-        }
-
         //public DataTable GetAllData
         //   (string SQL)
         //{
@@ -113,10 +45,10 @@ namespace IWT.OracleSync.Data
         //    {
 
         //        DataTable dt = new DataTable();
-        //        OracleConnection con = new OracleConnection(ConnectionString);
-        //        OracleCommand cmd = new OracleCommand(SQL);
+        //        SqlConnection con = new SqlConnection(ConnectionString);
+        //        SqlCommand cmd = new SqlCommand(SQL);
         //        cmd.Connection = con;
-        //        using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+        //        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
         //        {
         //            da.Fill(dt);
         //        }
@@ -126,16 +58,16 @@ namespace IWT.OracleSync.Data
         //    }
         //    catch (Exception ex)
         //    {
-        //        WriteLog.WriteToFile("OracleDB/GetAllData:" + ex.Message);
+        //        WriteLog.WriteToFile("GetAllData:" + ex.Message);
         //        return null;
         //    }
         //}
 
-        //public bool ExecuteQuery(OracleCommand command)
+        //public bool ExecuteQuery(SqlCommand command)
         //{
         //    try
         //    {
-        //        OracleConnection con = new OracleConnection(ConnectionString);
+        //        SqlConnection con = new SqlConnection(ConnectionString);
         //        con.Open();
         //        try
         //        {
@@ -151,16 +83,16 @@ namespace IWT.OracleSync.Data
         //    }
         //    catch (Exception ex)
         //    {
-        //        WriteLog.WriteToFile("OracleDB/ExecuteQuery : " + ex.Message);
+        //        WriteLog.WriteToFile("ExecuteQuery : " + ex.Message);
         //        return false;
         //    }
         //}
 
-        //public void InsertData(OracleCommand cmd, CommandType commandType = CommandType.StoredProcedure)
+        //public void InsertData(SqlCommand cmd, CommandType commandType = CommandType.StoredProcedure)
         //{
         //    try
         //    {
-        //        OracleConnection con = new OracleConnection(GetDecryptedConnectionStringDB());
+        //        SqlConnection con = new SqlConnection(GetDecryptedConnectionStringDB());
         //        cmd.Connection = con;
         //        cmd.CommandType = commandType;
         //        con.Open();
@@ -170,8 +102,76 @@ namespace IWT.OracleSync.Data
         //    }
         //    catch (Exception ex)
         //    {
-        //        WriteLog.WriteToFile("OracleDB/InsertData:" + ex.Message);
+        //        WriteLog.WriteToFile("InsertData:" + ex.Message);
         //    }
         //}
+
+        public DataTable GetAllData
+           (string SQL)
+        {
+            try
+            {
+
+                DataTable dt = new DataTable();
+                OracleConnection con = new OracleConnection(ConnectionString);
+                OracleCommand cmd = new OracleCommand(SQL);
+                cmd.Connection = con;
+                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+                cmd.Dispose();
+                con.Close();
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                WriteLog.WriteToFile("OracleDB/GetAllData:" + ex.Message);
+                return null;
+            }
+        }
+
+        public bool ExecuteQuery(OracleCommand command)
+        {
+            try
+            {
+                OracleConnection con = new OracleConnection(ConnectionString);
+                con.Open();
+                try
+                {
+                    command.Connection = con;
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception exp)
+                {
+                    throw exp;
+                }
+                con.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                WriteLog.WriteToFile("OracleDB/ExecuteQuery : " + ex.Message);
+                return false;
+            }
+        }
+
+        public void InsertData(OracleCommand cmd, CommandType commandType = CommandType.StoredProcedure)
+        {
+            try
+            {
+                OracleConnection con = new OracleConnection(GetDecryptedConnectionStringDB());
+                cmd.Connection = con;
+                cmd.CommandType = commandType;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                WriteLog.WriteToFile("OracleDB/InsertData:" + ex.Message);
+            }
+        }
     }
 }
