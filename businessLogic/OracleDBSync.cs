@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.OracleClient;
 using System.Data.SqlClient;
 
 namespace IWT.OracleSync.Business
