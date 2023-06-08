@@ -39,12 +39,12 @@ namespace IWT.OracleSync.Business
             foreach (OracleModel model in oracleData)
             {
                 
-                DataTable table = _sqlDb.GetData($"select * from RFID_Allocations where TransId={model.TransId}");
+                DataTable table = _sqlDb.GetData($"select * from RFID_Allocations where TransId={model.TRANSNO}");
                 string JSONString = JsonConvert.SerializeObject(table);
                 var rfIdAllocation = JsonConvert.DeserializeObject<List<RFIDAllocation>>(JSONString);
                 if (rfIdAllocation == null || rfIdAllocation.Count == 0)
                 {
-                    WriteLog.WriteToFile($"Inserting data into AWS Gate Entry for {model.TransId}");
+                    WriteLog.WriteToFile($"Inserting data into AWS Gate Entry for {model.TRANSNO}");
                     if (model.TRANSTYPE.Trim() == "R")
                     {
                         model.TRANSTYPE = "Inbound";
@@ -82,11 +82,11 @@ namespace IWT.OracleSync.Business
                                             '',
                                             'FT',
                                             '{model.TRANSTYPE == "Inbound"}',
-                                            '{model.VEHICLE_NUMBER}',
-                                            '{model.MATERIAL_CODE}',
-                                            '{model.MATERIAL_DESCRIPTION}',
-                                            '{model.SUPPLIER_CODE}',
-                                            '{model.SUPPLIER_DESCRIPTION}',
+                                            '{model.VEHINO}',
+                                            '{model.PRODCODE}',
+                                            '{model.PRODDESC}',
+                                            '{model.SUPPCODE}',
+                                            '{model.SUPPDESC}',
                                             '0',
                                             'Temporary',
                                             '{DateTime.Now.AddDays(2).ToString("yyyy-MM-dd HH:mm:ss")}',
@@ -100,7 +100,7 @@ namespace IWT.OracleSync.Business
                                             '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}',
                                             '{JsonConvert.SerializeObject(model)}',
                                             'Open',
-                                            '{model.TransId}');SELECT SCOPE_IDENTITY();";
+                                            '{model.TRANSNO}');SELECT SCOPE_IDENTITY();";
                     _sqlDb.ExecuteQuery(insertQuery);
                 }
                 else
