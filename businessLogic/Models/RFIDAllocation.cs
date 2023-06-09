@@ -30,12 +30,12 @@ namespace IWT.OracleSync.Business
         public string ModifiedOn { get; set; }
         public string OracleData { get; set;}
         public string OracleStatus { get; set;}
-        public int? TransId { get; set; }
+        public string TransId { get; set; }
     }
 
     public class RFIDAllocationWithTrans
     {
-        public int? TransId { get; set; }
+        public string TransId { get; set; }
         public int AllocationId { get; set; }        
         public string TransType { get; set; }        
         public int? EmptyWeight { get; set; }
