@@ -49,7 +49,7 @@ namespace IWT.OracleSync.Business
             foreach (OracleModel model in oracleData)
             {
                 
-                DataTable table = _sqlDb.GetData($"select * from RFID_Allocations where TransId={model.TRANSNO}");
+                DataTable table = _sqlDb.GetData($"select * from RFID_Allocations where VehicleNumber='{model.VEHINO}' AND Status='In-Transit'");
                 string JSONString = JsonConvert.SerializeObject(table);
                 var rfIdAllocation = JsonConvert.DeserializeObject<List<RFIDAllocation>>(JSONString);
                 if (rfIdAllocation == null || rfIdAllocation.Count == 0)
