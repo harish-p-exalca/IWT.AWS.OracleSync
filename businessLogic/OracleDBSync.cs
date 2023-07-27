@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace IWT.OracleSync.Business
 {
@@ -26,6 +27,7 @@ namespace IWT.OracleSync.Business
                 string queryForFirst = "select * from TRANS where GINDT IS NOT NULL AND FIRSTWT IS NULL AND (STATUS_FLG IS NULL OR STATUS_FLG='F' OR STATUS_FLG='S') AND CFLAG = 'F'";
                 DataTable filteredTable1 = _dbContext.GetData(queryForFirst);
                 string JSONString1 = JsonConvert.SerializeObject(filteredTable1);
+                WriteLog.WriteToFile("Oracle data :-    " + JSONString1);
                 oracleData = JsonConvert.DeserializeObject<List<OracleModel>>(JSONString1);
                 if (oracleData != null)
                 {
@@ -63,6 +65,10 @@ namespace IWT.OracleSync.Business
                     {
                         model.TRANSTYPE = "Outbound";
                     }
+                    Regex re = new Regex(@"([a-zA-Z]+)(\d+)");
+                    Match result = re.Match(model.RFIDTAGUID);
+                    string RFIDnumberPart = result.Groups[2].Value;
+                    WriteLog.WriteToFile("RFIDTAG:- ======>" + RFIDnumberPart);
                     string insertQuery = $@"INSERT INTO [RFID_Allocations] (TransType,
                                                                         IsSapBased,
                                                                         DocNumber,
@@ -100,7 +106,7 @@ namespace IWT.OracleSync.Business
                                             '0',
                                             'Temporary',
                                             '{DateTime.Now.AddDays(2).ToString("yyyy-MM-dd HH:mm:ss")}',
-                                            '{model.RFIDTAGUID}',
+                                            '{RFIDnumberPart}',
                                             'In-Transit',
                                             '[]',
                                             '',
@@ -152,7 +158,7 @@ namespace IWT.OracleSync.Business
                         WriteLog.WriteToFile("Updating first transaction records");
                         string camera1 = $"{firstCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
                         string camera3 = $"{thirdCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
-                        string updateQuery = $@"UPDATE TRANS SET ""FIRSTWTDT""='{firstWeightDate}',""FIRSTWTTM""='{firstWeightTime}',""FIRSTWT""='{firstWeight}', ""STATUS_FLG""='S',""WBNO_F""='{data.SystemID}', ""IMAGENO1""='{camera1}' WHERE TRANSNO={data.TransId}"; //, ""IMAGENO3""='{camera3}'
+                        string updateQuery = $@"UPDATE TRANS SET ""FIRSTWTDT""={Convert.ToDateTime(firstWeightDate).Date},""FIRSTWTTM""='{firstWeightTime}',""FIRSTWT""='{firstWeight}', ""STATUS_FLG""='S',""WBNO_F""='{data.SystemID}', ""IMAGENO1""='{camera1}' WHERE TRANSNO={data.TransId}"; //, ""IMAGENO3""='{camera3}'
                         var response = _dbContext.ExecuteQuery(updateQuery);
                         if (response)
                         {
@@ -222,7 +228,7 @@ namespace IWT.OracleSync.Business
                         WriteLog.WriteToFile("Updating second transaction records");
                         string camera2 = $"{secondCamera}\\{data.TicketNo}_{data.State}_cam{"1"}.jpeg";
                         string camera4 = $"{fourthCamera}\\{data.TicketNo}_{data.State}_cam{"2"}.jpeg";
-                        string updateQuery = $@"UPDATE TRANS SET ""SECONDWTDT""='{secondWeightDate}', ""SECONDWTTM""='{secondWeightTime}', ""SECONDWT""='{secondWeight}', ""STATUS_FLG""='C', ""NETWT""='{data.NetWeight}', ""WBNO_S""='{data.SystemID}', ""IMAGENO2""='{camera2}'  WHERE TRANSNO={data.TransId}";//IMAGENO4='{camera4}'
+                        string updateQuery = $@"UPDATE TRANS SET ""SECONDWTDT""={Convert.ToDateTime(secondWeightDate).Date}, ""SECONDWTTM""='{secondWeightTime}', ""SECONDWT""='{secondWeight}', ""STATUS_FLG""='C', ""NETWT""='{data.NetWeight}', ""WBNO_S""='{data.SystemID}', ""IMAGENO2""='{camera2}'  WHERE TRANSNO={data.TransId}";//IMAGENO4='{camera4}'
                         var response = _dbContext.ExecuteQuery(updateQuery);
                         if (response)
                         {
